@@ -2,7 +2,8 @@
 
 [배포링크:elephant:](https://chuhoon.github.io/TodolistMemo/)
 
-구현은 다했고 localStorage에 연결 안함 ~ing
+구현 완료
+localStorage에 연결 X ~ing
 
 ### 개선할 점
 

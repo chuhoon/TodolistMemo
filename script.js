@@ -1,5 +1,10 @@
 const timeCont = document.querySelector('.cont-time');
 const todoList = document.querySelector('.cont-list');
+const inputForm = document.querySelector('.input-form');
+todoInput = inputForm.querySelector('.input-text');
+
+let todoListArr = [];
+let listI = 0;
 
 function getTime() {
   const time = new Date();
@@ -16,31 +21,25 @@ function init() {
   setInterval(() => {
     getTime();
   }, 100);
-}
-
-let todoListArr = [];
-let listI = 0;
-
-function setTodoList() {
-  localStorage.setItem('key', JSON.stringify(todoListArr));
-}
-
-function loadToDos() {}
-
-function pushText() {
-  window.addEventListener('keydown', (e) => {
-    if (e.key == 'Enter' && document.getElementById('input-text').value != '') {
-      todoListArr.push(document.getElementById('input-text').value);
-      console.log(todoListArr);
-      document.getElementById('input-text').value = '';
-      createTodoList();
-      console.log(todoListArr);
-      listI += 1;
+  if (localStorage.getItem('key') !== null) {
+    for (let i = 0; i < JSON.parse(localStorage.getItem('key')).length; i++) {
+      getTodoList(JSON.parse(localStorage.getItem('key'))[i]);
     }
-  });
+  }
+  inputForm.addEventListener('submit', handleSubmit);
 }
 
-function createTodoList() {
+function setTodoList(text) {
+  todoListArr.push(text);
+  const todoStr = JSON.stringify(todoListArr);
+  localStorage.setItem('key', todoStr);
+  console.log(todoStr);
+}
+
+function getTodoList(text) {
+  const getStr = localStorage.getItem('key');
+  const parseGetStr = JSON.parse(getStr);
+
   const elli = document.createElement('li');
   const checkBtn = document.createElement('div');
   const elp = document.createElement('p');
@@ -52,7 +51,7 @@ function createTodoList() {
   elp.classList.add('p-data');
   clearBtn.classList.add('btn-clear');
 
-  elp.innerText = todoListArr[listI];
+  elp.innerText = text;
 
   elli.appendChild(checkBtn);
   elli.appendChild(elp);
@@ -61,7 +60,53 @@ function createTodoList() {
   todoList.appendChild(elli);
   completeTodo(checkBtn, elp);
   clearBtn.addEventListener('click', deletelist);
+
+  console.log(parseGetStr);
 }
+
+function handleSubmit(event) {
+  event.preventDefault();
+  const myList = todoInput.value;
+  setTodoList(myList);
+  getTodoList(myList);
+  todoInput.value = '';
+}
+
+// function pushText() {
+//   window.addEventListener('keydown', (e) => {
+//     if (e.key == 'Enter' && document.getElementById('input-text').value != '') {
+//       todoListArr.push(document.getElementById('input-text').value);
+//       document.getElementById('input-text').value = '';
+//       setTodoList();
+//       createTodoList();
+//       listI += 1;
+//     }
+//   });
+// }
+
+// function createTodoList() {
+//   const elli = document.createElement('li');
+//   const checkBtn = document.createElement('div');
+//   const elp = document.createElement('p');
+//   const clearBtn = document.createElement('div');
+//   clearBtn.innerText = 'x';
+
+//   elli.classList.add('list-item');
+//   checkBtn.classList.add('btn-checkBox');
+//   elp.classList.add('p-data');
+//   clearBtn.classList.add('btn-clear');
+//   getTodoList();
+
+//   elp.innerText = todoListArr[listI];
+
+//   elli.appendChild(checkBtn);
+//   elli.appendChild(elp);
+//   elli.appendChild(clearBtn);
+
+//   todoList.appendChild(elli);
+//   completeTodo(checkBtn, elp);
+//   clearBtn.addEventListener('click', deletelist);
+// }
 
 function completeTodo(checkBtn, elp) {
   checkBtn.addEventListener('click', function () {
@@ -80,5 +125,4 @@ function deletelist(event) {
   li.remove();
 }
 
-pushText();
 init();

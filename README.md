@@ -7,7 +7,7 @@ localStorage에 연결 O
 
 ### 개선할 점 (22-05-27)
 
-- localStorage 연결했으나 홈페이지를 초기화하고 다시 입력할 경우 초기화 되는 문제가 발생함
+- localStorage 반만 작동함 데이터를 가져오는 것은 유지가 되지만 다시 입력하면 localStorage가 초기화 발생
 - delete localStorage 구현
 - 달력 연결해서 todoList 구현
 - querySelector 문법 정리

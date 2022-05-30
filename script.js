@@ -3,6 +3,7 @@ const todoList = document.querySelector('.cont-list');
 const inputForm = document.querySelector('.input-form');
 todoInput = inputForm.querySelector('.input-text');
 
+// const TodoList = 'list';
 const todoListArr = [];
 
 function getTime() {
@@ -16,19 +17,18 @@ function getTime() {
   }:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
 
+function saveToDoList() {
+  localStorage.setItem('key', JSON.stringify(todoListArr));
+}
+
 function setTodoList(text) {
   todoListArr.push(text);
   console.log(todoListArr);
-  const todoStr = JSON.stringify(todoListArr);
-  localStorage.setItem('key', todoStr);
-  console.log(todoStr);
+  localStorage.setItem('key', JSON.stringify(todoListArr));
+  saveToDoList();
 }
 
 function getTodoList(text) {
-  const getStr = localStorage.getItem('key');
-  const parseGetStr = JSON.parse(getStr);
-  console.log(parseGetStr);
-
   const elli = document.createElement('li');
   const checkBtn = document.createElement('div');
   const elp = document.createElement('p');
@@ -41,7 +41,6 @@ function getTodoList(text) {
   clearBtn.classList.add('btn-clear');
 
   elp.innerText = text;
-  elp.id = todoListArr.length + 1;
 
   elli.appendChild(checkBtn);
   elli.appendChild(elp);
@@ -50,19 +49,21 @@ function getTodoList(text) {
   todoList.appendChild(elli);
   completeTodo(checkBtn, elp);
 
-  clearBtn.addEventListener('click', (event) => {
-    const li = event.target.parentElement;
-    const pdata = event.target.previousSibling.innerText;
-    console.log(pdata);
-    li.remove();
+  clearBtn.addEventListener('click', deleteBtn);
+  saveToDoList();
+}
 
-    for (let i = 0; i < parseGetStr.length; i++) {
-      if (parseGetStr[i] == pdata) {
-        parseGetStr.splice(i, 1);
-      }
+function deleteBtn(event) {
+  const li = event.target.parentElement;
+  const loadTodoList = localStorage.getItem('key');
+  const parsedloadTodoList = JSON.parse(loadTodoList);
+  for (let i = 0; i < parsedloadTodoList.length; i++) {
+    if (parsedloadTodoList[i] == event.target.previousSibling.innerText) {
+      li.remove();
+      parsedloadTodoList.splice(i, 1);
+      console.log(parsedloadTodoList);
     }
-    console.log(parseGetStr);
-  });
+  }
 }
 
 function completeTodo(checkBtn, elp) {
@@ -80,22 +81,29 @@ function completeTodo(checkBtn, elp) {
 function handleSubmit(event) {
   event.preventDefault();
   const myList = todoInput.value;
-  getTodoList(myList);
   setTodoList(myList);
-
+  getTodoList(myList);
   todoInput.value = '';
+}
+
+function loadList() {
+  const loadTodoList = localStorage.getItem('key');
+  if (loadTodoList !== null) {
+    const parsedloadTodoList = JSON.parse(loadTodoList);
+    for (let i = 0; i < parsedloadTodoList.length; i++) {
+      const txt = parsedloadTodoList[i];
+      setTodoList(txt);
+      getTodoList(txt);
+    }
+  }
 }
 
 function init() {
   setInterval(() => {
     getTime();
   }, 100);
-  if (localStorage.getItem('key') !== null) {
-    for (let i = 0; i < JSON.parse(localStorage.getItem('key')).length; i++) {
-      getTodoList(JSON.parse(localStorage.getItem('key'))[i]);
-      todoListArr.push(JSON.parse(localStorage.getItem('key'))[i]);
-    }
-  }
+  // localStorage.removeItem('key');
+  loadList();
   inputForm.addEventListener('submit', handleSubmit);
 }
 

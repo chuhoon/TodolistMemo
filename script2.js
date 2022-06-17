@@ -16,30 +16,13 @@ function getTime() {
   }:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
 
-function saveToDoList() {
-  localStorage.setItem('key', JSON.stringify(todoListArr));
-}
-
-function setTodoList(txt) {
+function saveToDoList(txt) {
   const toDoListObj = {
     text: txt,
-    id: todoListArr.length + 1,
+    id: todoList.length + 1,
   };
   todoListArr.push(toDoListObj);
-  saveToDoList();
-  console.log(todoListArr.length);
-  console.log(toDoListObj);
-}
-
-function deleteBtn(event) {
-  let li = event.target.parentElement;
-  li.remove();
-  console.log(li);
-  console.log(li.id);
-  console.log(todoListArr);
-  todoListArr = todoListArr.filter((txt) => txt.id !== Number(li.id));
-  console.log(todoListArr);
-  saveToDoList();
+  localStorage.setItem('key', JSON.stringify(todoListArr));
 }
 
 function paintTodoList(txt) {
@@ -66,6 +49,14 @@ function paintTodoList(txt) {
   clearBtn.addEventListener('click', deleteBtn);
 }
 
+function deleteBtn(event) {
+  const li = event.target.parentElement;
+  console.log(li);
+  li.remove();
+  todoListArr = todoListArr.filter((txt) => txt.id !== Number(li.id));
+  saveToDoList();
+}
+
 function completeTodo(checkBtn, elp) {
   checkBtn.addEventListener('click', function () {
     if (checkBtn.innerText == '') {
@@ -82,7 +73,7 @@ function handleSubmit(event) {
   event.preventDefault();
   const txt = todoInput.value;
   paintTodoList(txt);
-  setTodoList(txt);
+  saveToDoList(txt);
   todoInput.value = '';
 }
 
@@ -93,7 +84,7 @@ function loadList() {
     for (let txt of parsedloadTodoList) {
       const { text } = txt;
       paintTodoList(text);
-      setTodoList(text);
+      saveToDoList(text);
     }
   }
 }

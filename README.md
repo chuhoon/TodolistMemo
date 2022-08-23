@@ -3,7 +3,7 @@
 [배포링크:elephant:](https://chuhoon.github.io/TodolistMemo/)
 
 구현 완료
-localStorage에 연결 O
+localStorage에 연결 O 
 
 ### 개선할 점 (22-05-27)
 
@@ -11,3 +11,4 @@ localStorage에 연결 O
 - delete localStorage 구현
 - 달력 연결해서 todoList 구현
 - querySelector 문법 정리
+ 

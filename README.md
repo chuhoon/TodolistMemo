@@ -4,7 +4,8 @@ localStorage 연습 임의로 제작
 
 [배포링크:elephant:](https://chuhoon.github.io/TodolistMemo/)
 
-![TodoList 메모장]()
+![투두리스트](https://user-images.githubusercontent.com/68219145/186063335-0449e0e9-abcb-4153-8efe-86bc9c57a668.gif)
+
 
 ### 소개
 
